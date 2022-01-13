@@ -13,7 +13,8 @@ namespace Fictional_Customers.Controllers
     public class AssignmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
+        [BindProperty]
+        public long[] Employee { get; set; }
         public AssignmentsController(ApplicationDbContext context)
         {
             _context = context;
@@ -22,7 +23,8 @@ namespace Fictional_Customers.Controllers
         // GET: Assignments
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Assignments.ToListAsync());
+
+            return View(await _context.Assignments.Include(x => x.Employee).ToListAsync());
         }
 
         // GET: Assignments/Details/5
@@ -33,7 +35,7 @@ namespace Fictional_Customers.Controllers
                 return NotFound();
             }
 
-            var assignments = await _context.Assignments
+            var assignments = await _context.Assignments.Include(x => x.Employee)
                 .FirstOrDefaultAsync(m => m.AssignmentsId == id);
             if (assignments == null)
             {
@@ -46,6 +48,7 @@ namespace Fictional_Customers.Controllers
         // GET: Assignments/Create
         public IActionResult Create()
         {
+            ViewData["Employee"] = new MultiSelectList(_context.Staff.OrderBy(x => x.Name), nameof(Staff.StaffId), nameof(Staff.Name));
             return View();
         }
 
@@ -54,13 +57,16 @@ namespace Fictional_Customers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AssignmentsId,Company,Stack,ProgLang,StartDate")] Assignments assignments)
+        public async Task<IActionResult> Create([Bind("AssignmentsId,Company,Stack,Task,ProgLang,StartDate")] Assignments assignments)
         {
             if (ModelState.IsValid)
             {
+                foreach(var id in Employee)
+                {
+                    assignments.Employee.Add(_context.Staff.Find(id));
+                }
                 _context.Add(assignments);
                 await _context.SaveChangesAsync();
-                TempData["success"] = "Assignment Created Successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(assignments);
@@ -87,7 +93,7 @@ namespace Fictional_Customers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AssignmentsId,Company,Stack,ProgLang,StartDate")] Assignments assignments)
+        public async Task<IActionResult> Edit(int id, [Bind("AssignmentsId,Company,Stack,Task,ProgLang,StartDate")] Assignments assignments)
         {
             if (id != assignments.AssignmentsId)
             {
@@ -112,7 +118,6 @@ namespace Fictional_Customers.Controllers
                         throw;
                     }
                 }
-                TempData["success"] = "Assignment Updated Successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(assignments);
@@ -144,7 +149,6 @@ namespace Fictional_Customers.Controllers
             var assignments = await _context.Assignments.FindAsync(id);
             _context.Assignments.Remove(assignments);
             await _context.SaveChangesAsync();
-            TempData["success"] = "Assignment Deleted Successfully!";
             return RedirectToAction(nameof(Index));
         }
 

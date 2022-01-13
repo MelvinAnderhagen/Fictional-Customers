@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Create</h1>
@@ -21,6 +22,16 @@
                 <label asp-for="Stack" class="control-label"></label>
                 <select asp-for="Stack" class="form-control" asp-items="Html.GetEnumSelectList<Assignments.StackType>()"></select>
                 <span asp-validation-for="Stack" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Task" class="control-label"></label>
+                <input asp-for="Task" class="form-control" />
+                <span asp-validation-for="Task" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Employee" class="control-label"></label>
+                <select asp-for="Employee" class="form-control" asp-items="ViewBag.Employee"><option value="" disabled selected>Select Employee</option></select>
+                <span asp-validation-for="Employee" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProgLang" class="control-label"></label>
@@ -43,6 +54,3 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

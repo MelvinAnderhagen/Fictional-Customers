@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fictional_Customers.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220113091011_version03")]
-    partial class version03
+    [Migration("20220113151031_version01")]
+    partial class version01
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,21 @@ namespace Fictional_Customers.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("AssignmentsStaff", b =>
+                {
+                    b.Property<int>("AssignmentsId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("EmployeeStaffId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("AssignmentsId", "EmployeeStaffId");
+
+                    b.HasIndex("EmployeeStaffId");
+
+                    b.ToTable("AssignmentsStaff");
+                });
 
             modelBuilder.Entity("Fictional_Customers.Models.Assignments", b =>
                 {
@@ -37,7 +52,6 @@ namespace Fictional_Customers.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProgLang")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Stack")
@@ -45,6 +59,9 @@ namespace Fictional_Customers.Data.Migrations
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Task")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AssignmentsId");
 
@@ -59,11 +76,7 @@ namespace Fictional_Customers.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("StaffId"), 1L, 1);
 
-                    b.Property<int>("AssignmentsId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -71,12 +84,9 @@ namespace Fictional_Customers.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNmr")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("StaffId");
-
-                    b.HasIndex("AssignmentsId");
 
                     b.ToTable("Staff");
                 });
@@ -283,15 +293,19 @@ namespace Fictional_Customers.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Fictional_Customers.Models.Staff", b =>
+            modelBuilder.Entity("AssignmentsStaff", b =>
                 {
-                    b.HasOne("Fictional_Customers.Models.Assignments", "Assignments")
-                        .WithMany("Staff")
+                    b.HasOne("Fictional_Customers.Models.Assignments", null)
+                        .WithMany()
                         .HasForeignKey("AssignmentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Assignments");
+                    b.HasOne("Fictional_Customers.Models.Staff", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeStaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -343,11 +357,6 @@ namespace Fictional_Customers.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Fictional_Customers.Models.Assignments", b =>
-                {
-                    b.Navigation("Staff");
                 });
 #pragma warning restore 612, 618
         }

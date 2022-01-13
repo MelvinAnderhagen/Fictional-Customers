@@ -2,14 +2,14 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Staff</h1>
+<h1>Index</h1>
 
-<div class="text-end">
-            <a asp-action="Create" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> &nbsp; Create New Assignment</a>
-        </div>
-
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
@@ -21,9 +21,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PhoneNmr)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Assignments)
             </th>
             <th></th>
         </tr>
@@ -40,17 +37,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.PhoneNmr)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Assignments.Company)
-            </td>
-            <td>
+
+            <div class="text-end">
+                    <a asp-action="Details" asp-route-id="@item.StaffId" class="btn btn-primary" ><i class="bi bi-info-square"></i> &nbsp; Info</a>
                     @if (User.Identity.IsAuthenticated)
                     {
                         <a asp-action="Edit" asp-route-id="@item.StaffId" class="btn btn-success"><i class="bi bi-pencil-square"></i> &nbsp; Edit</a> 
-                        <a asp-action="Details" asp-route-id="@item.StaffId" class="btn btn-primary" ><i class="bi bi-info-square"></i> &nbsp; Info</a> 
                         <a asp-action="Delete" asp-route-id="@item.StaffId" class="btn btn-danger"><i class="bi bi-trash"></i> &nbsp; Delete</a>
                     }  
-            </td>
+                </div>
         </tr>
 }
     </tbody>

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Fictional_Customers.Data;
 using Fictional_Customers.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Fictional_Customers.Controllers
 {
@@ -23,8 +22,7 @@ namespace Fictional_Customers.Controllers
         // GET: Staffs
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Staff.Include(s => s.Assignments);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Staff.ToListAsync());
         }
 
         // GET: Staffs/Details/5
@@ -36,7 +34,6 @@ namespace Fictional_Customers.Controllers
             }
 
             var staff = await _context.Staff
-                .Include(s => s.Assignments)
                 .FirstOrDefaultAsync(m => m.StaffId == id);
             if (staff == null)
             {
@@ -47,10 +44,9 @@ namespace Fictional_Customers.Controllers
         }
 
         // GET: Staffs/Create
-        [Authorize]
         public IActionResult Create()
         {
-            ViewData["AssignmentsId"] = new SelectList(_context.Assignments, "AssignmentsId", "Company");
+            
             return View();
         }
 
@@ -59,21 +55,18 @@ namespace Fictional_Customers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StaffId,Name,Email,PhoneNmr,AssignmentsId")] Staff staff)
+        public async Task<IActionResult> Create([Bind("StaffId,Name,Email,PhoneNmr")] Staff staff)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(staff);
                 await _context.SaveChangesAsync();
-                TempData["success"] = "Employee Created Successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssignmentsId"] = new SelectList(_context.Assignments, "AssignmentsId", "Company", staff.AssignmentsId);
             return View(staff);
         }
 
         // GET: Staffs/Edit/5
-        [Authorize]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -86,7 +79,6 @@ namespace Fictional_Customers.Controllers
             {
                 return NotFound();
             }
-            ViewData["AssignmentsId"] = new SelectList(_context.Assignments, "AssignmentsId", "Company", staff.AssignmentsId);
             return View(staff);
         }
 
@@ -95,7 +87,7 @@ namespace Fictional_Customers.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("StaffId,Name,Email,PhoneNmr,AssignmentsId")] Staff staff)
+        public async Task<IActionResult> Edit(long id, [Bind("StaffId,Name,Email,PhoneNmr")] Staff staff)
         {
             if (id != staff.StaffId)
             {
@@ -120,15 +112,12 @@ namespace Fictional_Customers.Controllers
                         throw;
                     }
                 }
-                TempData["success"] = "Employee Updated Successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssignmentsId"] = new SelectList(_context.Assignments, "AssignmentsId", "Company", staff.AssignmentsId);
             return View(staff);
         }
 
         // GET: Staffs/Delete/5
-        [Authorize]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -137,7 +126,6 @@ namespace Fictional_Customers.Controllers
             }
 
             var staff = await _context.Staff
-                .Include(s => s.Assignments)
                 .FirstOrDefaultAsync(m => m.StaffId == id);
             if (staff == null)
             {
@@ -155,7 +143,6 @@ namespace Fictional_Customers.Controllers
             var staff = await _context.Staff.FindAsync(id);
             _context.Staff.Remove(staff);
             await _context.SaveChangesAsync();
-            TempData["success"] = "Employee Deleted Successfully!";
             return RedirectToAction(nameof(Index));
         }
 

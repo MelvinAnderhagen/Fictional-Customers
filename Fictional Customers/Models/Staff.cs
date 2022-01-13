@@ -13,8 +13,6 @@ namespace Fictional_Customers.Models
         public string Email { get; set; }
         [DisplayName("Phone Number")]
         public string PhoneNmr { get; set; }
-        public int AssignmentsId { get; set; }
-        public virtual Assignments Assignments { get; set; }
-
+        public ICollection<Assignments> Assignments { get; set; }
     }
 }

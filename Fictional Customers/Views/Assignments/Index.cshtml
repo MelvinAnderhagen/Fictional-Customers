@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Fictional_Customers.Models.Assignments>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Assignments</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Company)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stack)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProgLang)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stack)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProgLang)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AssignmentsId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AssignmentsId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AssignmentsId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -13,6 +13,24 @@ namespace Fictional_Customers.Models
         public string Email { get; set; }
         [DisplayName("Phone Number")]
         public string PhoneNmr { get; set; }
-        public ICollection<Assignments> Assignments { get; set; }
+        public List<Assignments> Assignments { get; set; } = new List<Assignments>();
+
+        public string GetAllAssignments()
+        {
+            string assignment = string.Empty;
+            for (int i = 0; i < Assignments.Count; i++)
+            {
+                if (i < Assignments.Count - 1)
+                {
+                    assignment += $"{Assignments[i].Company}, ";
+                }
+                else
+                {
+                    assignment += $"{Assignments[i].Company}";
+                }
+            }
+            //Employee.ForEach(e => employees += $"{e.Name}, ");
+            return assignment;
+        }
     }
 }

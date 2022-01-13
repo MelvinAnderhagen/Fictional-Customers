@@ -22,7 +22,7 @@ namespace Fictional_Customers.Controllers
         // GET: Staffs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Staff.ToListAsync());
+            return View(await _context.Staff.Include(x => x.Assignments).ToListAsync());
         }
 
         // GET: Staffs/Details/5
@@ -33,7 +33,7 @@ namespace Fictional_Customers.Controllers
                 return NotFound();
             }
 
-            var staff = await _context.Staff
+            var staff = await _context.Staff.Include(x => x.Assignments)
                 .FirstOrDefaultAsync(m => m.StaffId == id);
             if (staff == null)
             {
@@ -61,6 +61,7 @@ namespace Fictional_Customers.Controllers
             {
                 _context.Add(staff);
                 await _context.SaveChangesAsync();
+                TempData["success"] = "Employee Created Successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(staff);
@@ -112,6 +113,7 @@ namespace Fictional_Customers.Controllers
                         throw;
                     }
                 }
+                TempData["success"] = "Employee Updated Successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(staff);
@@ -143,6 +145,7 @@ namespace Fictional_Customers.Controllers
             var staff = await _context.Staff.FindAsync(id);
             _context.Staff.Remove(staff);
             await _context.SaveChangesAsync();
+            TempData["success"] = "Employee Removed Successfully!";
             return RedirectToAction(nameof(Index));
         }
 

@@ -29,14 +29,14 @@
                 <input asp-for="PhoneNmr" class="form-control" />
                 <span asp-validation-for="PhoneNmr" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-primary"><i class="bi bi-arrow-90deg-left"></i> &nbsp; Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 

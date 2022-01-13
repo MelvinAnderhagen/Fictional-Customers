@@ -67,6 +67,7 @@ namespace Fictional_Customers.Controllers
                 }
                 _context.Add(assignments);
                 await _context.SaveChangesAsync();
+                TempData["success"] = "Assignment Created Successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(assignments);
@@ -118,6 +119,7 @@ namespace Fictional_Customers.Controllers
                         throw;
                     }
                 }
+                TempData["success"] = "Assignment Updated Successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(assignments);
@@ -149,6 +151,7 @@ namespace Fictional_Customers.Controllers
             var assignments = await _context.Assignments.FindAsync(id);
             _context.Assignments.Remove(assignments);
             await _context.SaveChangesAsync();
+            TempData["success"] = "Assignment Removed Successfully!";
             return RedirectToAction(nameof(Index));
         }
 

@@ -5,11 +5,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Employees</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="text-end">
+            <a asp-action="Create" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> &nbsp; Create New Employee</a>
+        </div>
+}
+<br />
 <table class="table">
     <thead>
         <tr>
@@ -21,6 +25,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PhoneNmr)
+            </th>
+            <th>
+                Company(s)
             </th>
             <th></th>
         </tr>
@@ -37,7 +44,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.PhoneNmr)
             </td>
-
+             <td>
+                @item.GetAllAssignments()
+            </td>
+            <td>
             <div class="text-end">
                     <a asp-action="Details" asp-route-id="@item.StaffId" class="btn btn-primary" ><i class="bi bi-info-square"></i> &nbsp; Info</a>
                     @if (User.Identity.IsAuthenticated)
@@ -46,6 +56,7 @@
                         <a asp-action="Delete" asp-route-id="@item.StaffId" class="btn btn-danger"><i class="bi bi-trash"></i> &nbsp; Delete</a>
                     }  
                 </div>
+                </td>
         </tr>
 }
     </tbody>

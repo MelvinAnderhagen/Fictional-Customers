@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Fictional_Customers.Data;
 using Fictional_Customers.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fictional_Customers.Controllers
 {
@@ -46,6 +47,7 @@ namespace Fictional_Customers.Controllers
         }
 
         // GET: Staffs/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["AssignmentsId"] = new SelectList(_context.Assignments, "AssignmentsId", "Company");
@@ -71,6 +73,7 @@ namespace Fictional_Customers.Controllers
         }
 
         // GET: Staffs/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -125,6 +128,7 @@ namespace Fictional_Customers.Controllers
         }
 
         // GET: Staffs/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
